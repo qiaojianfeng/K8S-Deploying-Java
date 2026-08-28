@@ -12,7 +12,7 @@
     "JNLP_WORKING_DIR": "/home/jenkins/agent",
     "BUILDKIT_IMAGE": "docker.io/moby/buildkit:v0.32.2-rootless@sha256:504731e577c20559c00f968f33219f30115e70be29ab96728d1d06e963fc494b",
     "HELM_IMAGE": "docker.io/alpine/k8s:1.36.2@sha256:44ef4942e171939b9c665a4a84beb80e2dcdb9a24330d4651cfdfd2e9deecc47",
-    "IMAGE_REPOSITORY": "ghcr.io/sunweisheng/spring-app",
+    "IMAGE_REPOSITORY": "ghcr.io/qiaojianfeng/spring-app",
     "BUILDKIT_CACHE_REF": "${IMAGE_REPOSITORY}:buildcache",
     "HELM_RELEASE": "spring-app",
     "HELM_CHART": "deploy/charts/spring-app",
