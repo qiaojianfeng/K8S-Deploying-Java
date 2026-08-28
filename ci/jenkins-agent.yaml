@@ -48,7 +48,11 @@ spec:
         - name: MAVEN_CONFIG
           value: ${MAVEN_CONFIG}
         - name: MAVEN_OPTS
-          value: -Duser.home=${MAVEN_USER_HOME} -Dmaven.repo.local=${MAVEN_REPOSITORY} -XX:MaxRAMPercentage=75.0
+          value: >-
+            -Duser.home=${MAVEN_USER_HOME} -Dmaven.repo.local=${MAVEN_REPOSITORY}
+            -XX:MaxRAMPercentage=75.0 -Dhttp.proxyHost=192.168.123.44
+            -Dhttp.proxyPort=7897 -Dhttps.proxyHost=192.168.123.44
+            -Dhttps.proxyPort=7897
       resources:
         requests:
           cpu: "${MAVEN_CPU_REQUEST}"
