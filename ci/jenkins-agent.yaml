@@ -7,6 +7,10 @@ spec:
   serviceAccountName: ${DEPLOY_SERVICE_ACCOUNT}
   automountServiceAccountToken: false
   restartPolicy: Never
+  dnsConfig:
+    options:
+      - name: ndots
+        value: "1"
   securityContext:
     runAsNonRoot: true
     runAsUser: ${POD_RUN_AS_USER}
@@ -38,9 +42,6 @@ spec:
       command:
         - cat
       tty: true
-      envFrom:
-        - configMapRef:
-            name: ${BUILD_PROXY_CONFIG_MAP}
       env:
         - name: HOME
           value: ${MAVEN_USER_HOME}
