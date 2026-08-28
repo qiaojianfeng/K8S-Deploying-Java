@@ -4,9 +4,6 @@ LABEL org.opencontainers.image.source="https://github.com/sunweisheng/K8S-Deploy
 
 WORKDIR /app
 
-RUN groupadd --gid 10001 app \
-    && useradd --uid 10001 --gid 10001 --no-create-home --shell /usr/sbin/nologin app
-
 COPY --chown=10001:10001 target/app.jar /app/app.jar
 
 USER 10001:10001
