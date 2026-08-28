@@ -1,4 +1,4 @@
-FROM docker.io/library/eclipse-temurin:21-jre-jammy@sha256:3097cbbebb7d490494a98aed2301f284b38f79eba158eef098c6fc8c8af11c23
+FROM mcr.microsoft.com/openjdk/jdk:21-ubuntu@sha256:d4cb55376795c0facef7ff9e8cfd60dabdf792c7f8c7a26bb22c9a3e34d9b06e
 
 LABEL org.opencontainers.image.source="https://github.com/sunweisheng/K8S-Deploying-Java"
 
