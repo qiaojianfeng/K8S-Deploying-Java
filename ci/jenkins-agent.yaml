@@ -172,7 +172,8 @@ spec:
     - name: maven-home
       emptyDir: {}
     - name: maven-cache
-      emptyDir: {}
+      persistentVolumeClaim:
+        claimName: ${MAVEN_CACHE_CLAIM}
     - name: helm-home
       emptyDir: {}
     - name: ${HELM_OVERRIDE_VOLUME_NAME}

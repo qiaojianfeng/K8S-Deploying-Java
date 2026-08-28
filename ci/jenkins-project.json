@@ -25,6 +25,7 @@
     "MAVEN_USER_HOME": "/home/jenkins",
     "MAVEN_CONFIG": "/home/jenkins/.m2",
     "MAVEN_REPOSITORY": "/home/jenkins/.m2/repository",
+    "MAVEN_CACHE_CLAIM": "maven-cache",
     "HELM_USER_HOME": "/home/jenkins",
     "HELM_OVERRIDE_VOLUME_NAME": "helm-overrides",
     "HELM_OVERRIDE_CONFIG_MAP": "deploy-overrides",

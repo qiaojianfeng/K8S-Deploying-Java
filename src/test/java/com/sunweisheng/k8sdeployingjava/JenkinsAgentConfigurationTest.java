@@ -62,6 +62,10 @@ class JenkinsAgentConfigurationTest {
         assertEquals("/home/jenkins", mountPath(maven, "maven-home"));
         assertEquals("/home/jenkins/.m2/repository", mountPath(maven, "maven-cache"));
         assertTrue(volume("maven-home").containsKey("emptyDir"));
+        assertEquals(
+                "maven-cache",
+                map(volume("maven-cache").get("persistentVolumeClaim")).get("claimName")
+        );
         assertFalse(hasVolumeMount(maven, "maven-settings"));
         assertFalse(hasVolume("maven-settings"));
         assertFalse(hasEnvironment(maven, "HTTP_PROXY"));
