@@ -38,6 +38,9 @@ spec:
       command:
         - cat
       tty: true
+      envFrom:
+        - configMapRef:
+            name: ${BUILD_PROXY_CONFIG_MAP}
       env:
         - name: HOME
           value: ${MAVEN_USER_HOME}
