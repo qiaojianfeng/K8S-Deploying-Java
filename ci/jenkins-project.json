@@ -32,7 +32,10 @@
     "HELM_OVERRIDE_SOURCE_FILE": "${HELM_OVERRIDE_MOUNT_PATH}/values.yaml",
     "HELM_OVERRIDE_VALUES_FILE": ".jenkins-json-build/deploy-overrides-values.yaml",
     "HELM_OVERRIDE_PREPARE_SCRIPT": "ci/prepare-helm-values.sh",
-    "BUILD_PROXY_CONFIG_MAP": "build-proxy"
+    "BUILD_PROXY_CONFIG_MAP": "build-proxy",
+    "POD_HTTP_PROXY": "http://192.168.123.44:7897",
+    "POD_HTTPS_PROXY": "http://192.168.123.44:7897",
+    "POD_NO_PROXY": "127.0.0.1,localhost,192.168.123.0/24,192.168.252.0/24,10.244.0.0/16,10.96.0.0/12,.k8s.lab,.svc,.svc.cluster.local,kubernetes.default.svc"
   },
   "agent": {
     "type": "kubernetes",
