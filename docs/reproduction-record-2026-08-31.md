@@ -18,7 +18,24 @@
 - 三个节点在 2026-08-31 均为 `Ready`。
 - RouterOS 已完成桥接网络与 BGP 配置；Kubernetes 业务网段为 `192.168.123.0/24`。
 
-## 2. 核心组件与关键配置
+## 2. 笔记本与虚拟化环境
+
+| 项目 | 参数 |
+| --- | --- |
+| 宿主系统 | macOS 14.4 (23E214) |
+| CPU 架构 | Apple Silicon ARM64，8 核 |
+| 物理内存 | 16 GiB |
+| Multipass | 1.16.3+mac |
+| UTM | 4.7.5 |
+| 虚拟机系统 | Ubuntu 24.04.4 LTS ARM64 |
+| 单台 Kubernetes VM 规格 | 2 vCPU、约 3.8 GiB 内存、29 GiB 磁盘 |
+| VM 网络 | Multipass NAT `192.168.252.0/24` + 桥接业务网 `192.168.123.0/24` |
+
+- UTM 用于启动 RouterOS 虚拟机；RouterOS 的桥接接口连接到业务网，用于后续 BGP 路由实验。
+- Multipass 用于创建和管理 1 台 control-plane 与 2 台 worker Ubuntu 虚拟机。
+- 本机 HTTP/HTTPS 代理监听在业务网地址的 `7897` 端口，供 Git、Maven、Jenkins Agent 与必要的镜像拉取使用。该地址仅适用于当前局域网环境。
+
+## 3. 核心组件与关键配置
 
 | 组件 | 命名空间/位置 | 最终状态或配置 |
 | --- | --- | --- |
@@ -39,7 +56,7 @@
 - `ci/maven-cache-storage.yaml`：NFS PV/PVC 定义。
 - `Dockerfile`：Microsoft OpenJDK 21 基础镜像，以数值 UID/GID `10001:10001` 运行应用。
 
-## 3. 最终成功构建
+## 4. 最终成功构建
 
 | 字段 | 结果 |
 | --- | --- |
@@ -52,7 +69,7 @@
 | Helm 结果 | `STATUS: deployed` |
 | 部署方式 | Helm 使用 `image.repository` + `image.digest`，避免可变 tag |
 
-## 4. 部署验证
+## 5. 部署验证
 
 2026-08-31 核验结果：
 
@@ -66,10 +83,12 @@
 | `ingress/spring-app` | Host `app.k8s.lab`，Traefik Ingress |
 | 外部入口 | `https://app.k8s.lab:30443/` 返回 HTTP `200` |
 
-## 5. 问题处理记录
+## 6. 问题处理记录
 
 | 问题 | 原因 | 处理与结果 |
 | --- | --- | --- |
+| Multipass 后台 socket 无法连接 | macOS 上的 Multipass 后台连接异常，导致 CLI 无法管理 VM | 修复 Multipass 后台 socket 连接并确认三台 VM 均可通过 `multipass exec` 管理 |
+| UTM RouterOS 无法进入业务网络 | 初始虚拟网卡未使用桥接模式 | 在 UTM 将 RouterOS 网络改为桥接后启动，并完成 BGP 配置 |
 | Jenkins Agent 无法连接 Controller | Pod DNS 的 `ndots:5` 使 Jenkins Service 名称被错误搜索 | Jenkins 内部 URL 使用末尾点号 FQDN，Agent DNS 设置为 `ndots:1` |
 | Maven Central 返回不可达 Fake-IP | CoreDNS 上游 DNS 受到本机代理 Fake-IP 影响 | CoreDNS 改用真实上游 DNS；Maven Agent 配置本机代理 |
 | Docker Hub 基础镜像层下载极慢或卡住 | 直连/代理到 Docker Hub 的大层传输不稳定 | 应用基础镜像切换到 Microsoft OpenJDK，并为 Microsoft Registry 配置直连；containerd 增加已验证的 Docker Hub mirror |
@@ -80,7 +99,7 @@
 | Microsoft OpenJDK 构建失败 | 基础镜像已有 `app` 组，重复 `groupadd app` 返回 exit code 9 | 删除冗余用户/组创建，保留数值非 root 用户运行方式 |
 | GitHub commit status 未回写 | PAT 缺少 `repo:status` 或仓库协作者权限 | 不影响 Checkout、构建、GHCR 推送与部署；如需状态回写，补充对应权限 |
 
-## 6. 复刻后操作建议
+## 7. 复刻后操作建议
 
 1. 后续修改应用代码后，在 Jenkins `spring-app/main` 触发构建；成功构建将推送新的 GHCR 镜像摘要并执行 Helm 滚动发布。
 2. 监控 NFS、Jenkins 和 PostgreSQL。这三个组件当前是实验环境单点，不具备生产级高可用。
